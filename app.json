@@ -12,7 +12,10 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Allow the app to access your location"
+      }
     },
     "android": {
       "adaptiveIcon": {

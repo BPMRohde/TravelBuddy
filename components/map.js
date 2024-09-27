@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, Alert } from 'react-native';
-import MapView, {Marker} from 'react-native-maps';
+import { Text, View, Alert, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import MapView, {Marker, Callout} from 'react-native-maps';
 import * as Location from 'expo-location';
 import { getDatabase, ref, onValue, off } from "firebase/database";
+import { useNavigation } from '@react-navigation/native';
 
 const Map = (props) => {
-
+    const navigation = useNavigation();
     const [markers, setMarkers] = useState([]);
     const [locationGranted, setLocationGranted] = useState(false);
 
@@ -61,9 +62,19 @@ const Map = (props) => {
                         <Marker
                         key={marker.id}
                         coordinate={marker.latlng}
-                        title={marker.title}
-                        description={marker.description}
-                        />
+                        >
+                            <Image source={require('../assets/marker.png')} style={{width: 30, height: 30}} />
+                            <Callout>
+                                <View style={styles.callout}>
+                                    <Text style={styles.title}>{marker.title}</Text>
+                                    <Text style={styles.type}>{marker.type}</Text>
+                                    <Text style={styles.description}>{marker.description}</Text>
+                                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('View_marker', {marker})}>
+                                        <Text>See more</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </Callout>
+                        </Marker>
                     ))}
                 </MapView>
             ) : (
@@ -72,5 +83,29 @@ const Map = (props) => {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    callout: {
+        width: 200,
+        height: 100
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 16
+    },
+    type: {
+        fontStyle: 'italic'
+    },
+    description: {
+        fontSize: 12,
+        marginTop: 5
+    },
+    button: {
+        backgroundColor: '#7AE3BB',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 5
+    },
+});
 
 export default Map;

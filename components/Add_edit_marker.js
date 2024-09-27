@@ -1,9 +1,9 @@
-import { Text, View, StyleSheet, SafeAreaView, ScrollView, TextInput, Button, Alert } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView, ScrollView, TextInput, Alert } from 'react-native';
 import {useEffect, useState} from "react"; 
 import { getDatabase, ref, child, push, update  } from "firebase/database";
 import Colors from '../constants/Colors';
 
-const Add_edit_marker = (navigation, route) => {
+const Add_edit_marker = ({navigation, route}) => {
     const db = getDatabase();
     const initialState = {
         latlng: {
@@ -83,8 +83,8 @@ const Add_edit_marker = (navigation, route) => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={[styles.container, {borderBottomWidth: 0}]}>
-                <Text style={{font: 'bold', fontSize: 30, textDecorationLine: 'underline'}}>Make a marker</Text>
                 <View style={styles.card}>
+                    <Text style={{font: 'bold', fontSize: 30, marginBottom: 10}}>Make a marker</Text>
                     <View style={styles.section}>
                         <Text style={styles.label}>Title</Text>
                         <TextInput style={styles.input} value={newMarker.title} onChangeText={(e) => changeTextInput('title',e)}></TextInput>
@@ -107,9 +107,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: Colors.primary,
-        borderBottomColor: 'black',
-        borderBottomWidth: 2,
+        backgroundColor: Colors.secondary,
     },
     input: {
         height: 40,

@@ -1,7 +1,7 @@
 const Colors = {
-    primary: '#8AC6D0',
-    secondary: '#C69F89',
-    activeNavigation: '#0B92AA',
+    primary: '#7AE3B0',
+    secondary: '#99EFED',
+    activeNavigation: '#42AD7A',
 };
 
 export default Colors;

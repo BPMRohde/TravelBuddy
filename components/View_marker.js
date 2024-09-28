@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
         margin: 10,
         borderRadius: 10,
         alignItems: 'center',
-        width: 450,
     },
     section: {
         marginBottom: 20,

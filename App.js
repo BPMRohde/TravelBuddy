@@ -21,14 +21,10 @@ const firebaseConfig = {
   measurementId: "G-ELVNEG5Y1L"
 };
 
-
-    // Vi kontrollerer at der ikke allerede er en initialiseret instans af firebase
-    // Så undgår vi fejlen Firebase App named '[DEFAULT]' already exists (app/duplicate-app).
-    if (getApps().length < 1) {
-      initializeApp(firebaseConfig);
-      console.log("Firebase On!");
-  // Initialize other firebase products here
-  }
+if (getApps().length < 1) {
+  initializeApp(firebaseConfig);
+  console.log("Firebase On!");
+}
 
 export default function App() {
 

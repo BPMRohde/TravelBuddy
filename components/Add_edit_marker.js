@@ -19,13 +19,8 @@ const Add_edit_marker = ({navigation, route}) => {
     }
 
     const [newMarker, setNewMarker] = useState(initialState);
-    const isEditMarker = route.name === 'Edit marker';
 
     useEffect(() => {
-        if(isEditMarker){
-            setNewMarker(route.params.marker[1]);
-        }
-        /*Fjern data, når vi går væk fra screenen*/
         return () => {
             setNewMarker(initialState);
         }
@@ -35,6 +30,7 @@ const Add_edit_marker = ({navigation, route}) => {
         setNewMarker({...newMarker, [key]: value});
     };
 
+    //Denne funktion bruges til at omdanne en adresse til koordinater.
     const geoCode = async () => {
         const geocodedLocation = await Location.geocodeAsync(newMarker.address);
         console.log('Geocoded location:', geocodedLocation);
@@ -49,7 +45,7 @@ const Add_edit_marker = ({navigation, route}) => {
     };
     
     
-
+    //Denne funktion bruges til at gemme en markør
     const saveMarker = async () => {
         const {title, type, description, address} = newMarker;
         if (title === '' || type === '' || description === ''|| address === '') {
@@ -66,59 +62,36 @@ const Add_edit_marker = ({navigation, route}) => {
 
         const { latitude, longitude } = newLatLng;
 
-        // Update the marker state with the new coordinates
+        // Marker opdateres med de nyfundne koordinater
         setNewMarker((prev) => ({
             ...prev,
             latlng: { latitude, longitude }
         }));
 
-        // Now check the coordinates
+        // Hvis der ikke er fundet koordinater, må adressen være ugyldig
         if (latitude === 0 && longitude === 0) {
             Alert.alert('Address not found');
             return;
         }
+        
+        const markerRef = ref(db, 'Cities/Copenhagen/Markers');
 
-        if(isEditMarker){
-            const id = route.params.marker[0];
-            const markerRef = ref(db, `Cities/Copenhagen/Markers/${id}`);
+        const newMarkerRef = {
+            title,
+            type,
+            description,
+            latlng: {latitude, longitude},
+            address
+        };
 
-            const updateFields = {
-                title,
-                type,
-                description,
-                latlng: {latitude, longitude},
-                address
-            };
-
-            await update(markerRef, updateFields)
-                .then(() => {
-                    Alert.alert('Marker updated');
-                    const marker = newMarker;
-                    navigation.navigate('Map');
-                })
-                .catch((error) => {
-                    Alert.alert('Error updating marker', error.message);
-                });
-            } else{
-                const markerRef = ref(db, 'Cities/Copenhagen/Markers');
-
-                const newMarkerRef = {
-                    title,
-                    type,
-                    description,
-                    latlng: {latitude, longitude},
-                    address
-                };
-
-                await push(markerRef, newMarkerRef)
-                    .then(() => {
-                        Alert.alert('Marker added');
-                        setNewMarker(initialState);
-                    })
-                    .catch((error) => {
-                        Alert.alert('Error adding marker', error.message);
-                    });
-            }
+        await push(markerRef, newMarkerRef)
+            .then(() => {
+                Alert.alert('Marker added');
+                setNewMarker(initialState);
+            })
+            .catch((error) => {
+                Alert.alert('Error adding marker', error.message);
+            });
     }
 
     return (

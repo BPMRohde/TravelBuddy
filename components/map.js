@@ -11,7 +11,7 @@ const Map = (props) => {
     const [locationGranted, setLocationGranted] = useState(false);
 
     useEffect(() => {
-        // Request location permissions
+        //Der bedes om tilladelse til at bruge lokalitets information.
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -21,12 +21,12 @@ const Map = (props) => {
             setLocationGranted(true);
         })();
 
-        //Hent markere fra firebase
+        //Her hentes markører fra databasen.
         const db = getDatabase();
         const markersRef = ref(db, 'Cities/Copenhagen/Markers');
         onValue(markersRef, (snapshot) => {
             const data = snapshot.val();
-            // Transform object to array of markers and convert lat/lng to float
+            //Det objekt som kommer fra databasen omdannes til et array af markører. Derudover konverteres lat/lng fra strings til floats, dette er nødvendigt for android kompatibilitet.
             if (data) {
                 const markersArray = Object.keys(data).map(key => ({
                     ...data[key],

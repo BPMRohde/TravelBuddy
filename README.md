@@ -7,4 +7,4 @@ Den del jeg har valgt at lave her er skærm med et kort, hvor der er pins i kort
 Derudover er der en skærm hvor der kan laves anbefalinger, og en skærm hvor man kan se mere information omkring en anbefaling.
 
 
-Video demo
+**Video demo

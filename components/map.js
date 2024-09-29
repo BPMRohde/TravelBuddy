@@ -26,11 +26,15 @@ const Map = (props) => {
         const markersRef = ref(db, 'Cities/Copenhagen/Markers');
         onValue(markersRef, (snapshot) => {
             const data = snapshot.val();
-            // Transform object to array of markers
+            // Transform object to array of markers and convert lat/lng to float
             if (data) {
                 const markersArray = Object.keys(data).map(key => ({
                     ...data[key],
-                    id: key // Include the key as an ID for each marker
+                    id: key, // Include the key as an ID for each marker
+                    latlng: {
+                        latitude: parseFloat(data[key].latlng.latitude),  // Ensure latitude is a float
+                        longitude: parseFloat(data[key].latlng.longitude) // Ensure longitude is a float
+                    }
                 }));
                 setMarkers(markersArray);
             }
@@ -64,14 +68,14 @@ const Map = (props) => {
                         coordinate={marker.latlng}
                         >
                             <Image source={require('../assets/marker.png')} style={{width: 30, height: 30}} />
-                            <Callout>
+                            <Callout onPress={() => navigation.navigate('View_marker', {marker})}>
                                 <View style={styles.callout}>
                                     <Text style={styles.title}>{marker.title}</Text>
                                     <Text style={styles.type}>{marker.type}</Text>
                                     <Text style={styles.description}>{marker.description}</Text>
-                                    <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('View_marker', {marker})}>
-                                        <Text>See more</Text>
-                                    </TouchableOpacity>
+                                    <View style={styles.button}>
+                                        <Text >See more</Text>
+                                    </View>
                                 </View>
                             </Callout>
                         </Marker>
@@ -87,7 +91,6 @@ const Map = (props) => {
 const styles = StyleSheet.create({
     callout: {
         width: 200,
-        height: 100
     },
     title: {
         fontWeight: 'bold',

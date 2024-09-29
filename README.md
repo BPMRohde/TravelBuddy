@@ -10,3 +10,4 @@ Den del jeg har valgt at udvikle indeholder:
 
 
 **Video demo**
+[Watch the video demo](https://github.com/BPMRohde/TravelBuddy/blob/master/videoDemo.MP4)
